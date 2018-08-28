@@ -25,9 +25,17 @@ if(app.get('env') === 'developement'){
 //Middleware
 app.use('/api/v1/questions', questionsRouter)
 
+
+//Table to store all the questions 
 Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, userId SERIAL, question TEXT NOT NULL)')
 .then(res => {console.log(`Stuffs went well \n ${res.rows}`)})
 .catch(new Error().message)
+
+
+//Table to store all the answers
+Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN)')
+.then(res => {console.log('Answers table created...')})
+.catch(e => {console.log('answers table not created...')})
 
 module.exports = app
 
