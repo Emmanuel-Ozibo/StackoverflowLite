@@ -1,4 +1,4 @@
-const pool = require('../database')
+const pool = require('../../database')
 
 const insertQuestionString = 'INSERT INTO questions_table(userId, question) VALUES($1, $2) RETURNING *'
 
