@@ -1,0 +1,25 @@
+{
+  "name": "andela_vlf_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Emeecodes01/andela_vlf_test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Emeecodes01/andela_vlf_test/issues"
+  },
+  "homepage": "https://github.com/Emeecodes01/andela_vlf_test#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "pg": "^7.4.3"
+  }
+}
