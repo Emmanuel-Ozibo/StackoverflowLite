@@ -8,6 +8,8 @@ const app = express()
 
 //Routers
 const questionsRouter = require('./Routes/questions')
+const authRouter = require('./Routes/authRoute')
+
 
 
 //Express middleware 
@@ -22,8 +24,15 @@ if(app.get('env') === 'developement'){
 }
 
 
-//Middleware
+//Routes Middleware
 app.use('/api/v1/questions', questionsRouter)
+app.use('/api/v1/auth', authRouter)
+
+
+//Table to store users
+Pool.query('CREATE TABLE IF NOT EXISTS users_table(id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)')
+.then(result => {console.log(`users table created ${result.rows}`)})
+.catch(error => {console.log(`Failed to create users table: ${error}`)})
 
 
 //Table to store all the questions 
@@ -33,9 +42,10 @@ Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, us
 
 
 //Table to store all the answers
-Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN)')
+Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN, userId SERIAL)')
 .then(res => {console.log('Answers table created...')})
 .catch(e => {console.log('answers table not created...')})
+
 
 module.exports = app
 

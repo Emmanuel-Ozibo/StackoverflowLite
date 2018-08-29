@@ -18,7 +18,10 @@
   },
   "homepage": "https://github.com/Emeecodes01/andela_vlf_test#readme",
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "express": "^4.16.3",
+    "joi": "^13.6.0",
+    "lodash": "^4.17.10",
     "morgan": "^1.9.0",
     "pg": "^7.4.3"
   }
