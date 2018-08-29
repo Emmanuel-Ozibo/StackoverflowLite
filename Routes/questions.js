@@ -1,5 +1,5 @@
 const router = require('express').Router()
-
+const authMiddleWare = require('../middleware/auth')
 
 //Controller
 const{postQuestionsController,
@@ -9,12 +9,12 @@ const{postQuestionsController,
 
 
 //Router
-router.post('/', postQuestionsController.insertQuestion)
-router.get('/', getQuestionsController.getQuestions)
-router.get('/:questionId', getQuestionsController.setSingleQuestion)
-router.delete('/:questionId', getQuestionsController.deleteQuestion)
-router.post('/:questionId/answers', answersController.postAnswer)
-router.put('/:questionId/answers/answerId', answersController.updateAnswer)
+router.post('/',authMiddleWare.authWare,postQuestionsController.insertQuestion)
+router.get('/',authMiddleWare.authWare,getQuestionsController.getQuestions)
+router.get('/:questionId',authMiddleWare.authWare,getQuestionsController.setSingleQuestion)
+router.delete('/:questionId',authMiddleWare.authWare,getQuestionsController.deleteQuestion)
+router.post('/:questionId/answers',authMiddleWare.authWare,answersController.postAnswer)
+router.put('/:questionId/answers/answerId',authMiddleWare.authWare,answersController.updateAnswer)
 
 
 module.exports = router

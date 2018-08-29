@@ -1,6 +1,7 @@
 const pool = require('../../database')
 
 
+
 const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id ASC'
 
 //This is an sql query to get the answers of a particular question using its id

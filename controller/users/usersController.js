@@ -2,6 +2,9 @@ const pool = require('../../database')
 const Joi = require('joi')
 const bcrypt = require('bcrypt')
 const _= require('lodash')
+const jwt = require('jsonwebtoken')
+const config = require('config')
+
 
 //query to register new user
 const registerUserString = 'INSERT INTO users_table(username, email, password) VALUES($1, $2, $3) RETURNING*'
@@ -40,7 +43,6 @@ exports.registerUser = async (req, res) => {
     pool.query(getUserWithEmail, [user.email])
     .then(result => {
         if(result.rowCount === 0){
-            
             //user have not been registered
             bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (error, hash) => {
@@ -49,7 +51,9 @@ exports.registerUser = async (req, res) => {
 
                 pool.query(registerUserString, [`${user.username}`, `${user.email}`, `${user.password}`])
                 .then(result => {
-                    res.send(result.rows[0])
+                    const userData = _.pick(result.rows[0], ['id', 'username', 'email'])
+                    const token = jwt.sign(userData, config.get('jwtPrivateKey'))
+                    res.header('x-auth-token', token).send({status: 'success', data: userData})
                 })
                 .catch(error => {
                     res.status(400).send({massage: 'There was an error registering users'})
@@ -103,7 +107,9 @@ exports.loginUser = (req, res) =>{
                 }
                 if(response){
                     const userData = _.pick(registeredUser, ['id', 'username', 'email'])
-                    res.send({status: 'success', data: userData})
+                    //create json web token here 
+                    const token = jwt.sign(userData, config.get('jwtPrivateKey'))
+                    res.header('x-auth-token', token).send({status: 'success', data: userData})
                 }else{
                     res.status(400).send({status: 'error', message: 'Incorrect password.'})
                 }
