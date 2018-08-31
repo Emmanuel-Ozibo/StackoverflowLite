@@ -7,9 +7,10 @@ exports.insertQuestion = (req, res) =>{
         userId: req.body.userId, 
         question: req.body.question
     }
+    
     const values = [`${user.userId}`, `${user.question}`]
     
-    const query = pool.query(insertQuestionString, values)
+    pool.query(insertQuestionString, values)
         .then(Response => {
             res.status(200).send(Response.rows[0])
         })

@@ -2,7 +2,7 @@ const pool = require('../../database')
 
 const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId) VALUES($1, $2, $3, $4) RETURNING *'
 
-const getAnswerString = 'SELECT userid FROM answers_table WHERE id = $1'
+const getUserThatAnsweredquestion = 'SELECT userid FROM answers_table WHERE id = $1'
 
 const updateAnAnswer = 'UPDATE answers_table SET answer = $1 WHERE id = $2'
 
@@ -30,54 +30,55 @@ exports.postAnswer = (req, res) =>{
     })
 }
 
-exports.updateAnswer = (req, res) => {
-    
-   const ansId = req.params.answerId
-   const uId = req.body.userId 
-   const newAnswer = req.body.answer
 
-    //get the id of who answered the question 
-    pool.query(getAnswerString, [ansId])
+
+const updateAnswer = async (answerId, newAnswer, res) =>{
+    pool.query(updateAnAnswer, [newAnswer, answerId])
     .then(result => {
-        const id = result.rows[0].userId
-        if(uId === id){
-            pool.query(updateAnAnswer, [newAnswer, ansId])
-            .then(resul =>{
-                res.status(200).send(resul.rows[0])
-            })
-            .catch(eror => {
-                res.status(505).send({status: 'failed', message: 'Cannot update answer.'})
-            })
-        }else{
-            res.status(400).send({status: 'failed', message: 'UnAuthorized'})
-        }
+        res.send({status: 'success', message: 'Answer updated.'})
+    })
+    .catch(error => {
+        res.status(505).send(`Cannot update answer, internal server error: ${error.message}`)
     })
 }
 
 
-
-exports.acceptAnswer = (req, res) => {
-
-    const userId = req.body.userId
+exports.modifyAnswer = async (req, res) => {
+    const userDetails = req.userDetails
+    const userId = userDetails.id
     const answerId = req.params.answerId
-    const questionId = req.body.questionId
-    const status = req.body.status
+    const questionId = req.params.questionId
 
-    pool.query(askQuestionUserId, [questionId])
-    .then(result1 => {
-        if(userId === result1.rows[0].userid){
-            pool.query(acceptAnswerString, [status,answerId])
-            .then(result => {
-                res.send(result.rows[0])
-            })
-            .catch(err => {
-                res.status(505).send({message: 'Unable to update answer.'})
-            })
+    try {
+        //query the answers table to check if the user is present
+        const result =await pool.query(getUserThatAnsweredquestion, [answerId])
+        const questionResult =  await pool.query(askQuestionUserId, [questionId])
+
+        //if none of this is present 
+        if(result.rows[0].userid !== userId && questionResult.rows[0].userid !== userId) return res.status(401).send('UnAuthorized..')
+
+        console.log(`${result.rows[0].userid},\n${questionResult.rows[0].userid}`)
+        if(result.rows[0].userid === userId){
+            //update answer
+            updateAnswer(answerId, req.body.answer, res)
         }else{
-            res.status(400).send({message: 'UnAuthorized to perform this operation.'})
+            //accept the answer
+            acceptAnswer(answerId, req.body.status, res)
         }
+
+    }catch (error){
+        res.status(505).send(`Internal server error1: ${error}`)
+    }
+
+}
+
+
+const acceptAnswer = (answerId, status, res) => {
+    pool.query(acceptAnswerString, [status, answerId])
+    .then(result => {
+        res.send({status: 'success', message: 'Answer Accepted.'})
     })
     .catch(error => {
-        res.status(505).send({message: 'Unable to update answer.', data: error()})
+        res.status(505).send(`Cannot accept answer, Internal server error: ${error.message}`)
     })
 }
