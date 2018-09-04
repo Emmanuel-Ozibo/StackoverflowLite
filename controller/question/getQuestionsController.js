@@ -16,6 +16,9 @@ const getUserIdForQuestion = 'SELECT userId FROM questions_table WHERE id = $1'
 //delete question
 const deleteQuestion = 'DELETE FROM questions_table WHERE id = $1'
 
+//get all questions asked by a user 
+const questionAskedByUser = 'SELECT question FROM questions_table WHERE userid = $1'
+
 
 
 
@@ -84,4 +87,15 @@ exports.deleteQuestion = (req, res) => {
     .catch(err => {
 
     })
+}
+
+exports.getAllQuestionsAskByUser = async (req, res) =>{
+
+    try {
+        const allQuestions = await pool.query(questionAskedByUser, [`${req.user.id}`])
+        res.send({status: 'success', messages: allQuestions.rows})
+    } catch (error) {
+        res.status(505).send(`An error occured while getting all questions: ${error.message}`)
+    }
+    
 }

@@ -10,6 +10,6 @@ exports.authWare = (req, res, next) => {
         req.user = decode
         next()
     }catch(ex){
-        res.status(400).send('failed, invalid token')
+        res.status(400).send(`failed, invalid token`)
     }
 }

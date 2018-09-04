@@ -18,6 +18,6 @@ router.delete('/:questionId',authMiddleWare.authWare,getQuestionsController.dele
 router.post('/:questionId/answers',authMiddleWare.authWare,answersController.postAnswer)//answer a question
 //allow the modification of an answer(edit by the answer publisher or accept by the author)
 router.put('/:questionId/answers/:answerId',authMiddleWare.authWare,modifyAnswerMiddleware.modifyAnswer,answersController.modifyAnswer)
-
+router.get('/user/questions',authMiddleWare.authWare,getQuestionsController.getAllQuestionsAskByUser)
 
 module.exports = router

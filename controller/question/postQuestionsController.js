@@ -4,7 +4,7 @@ const insertQuestionString = 'INSERT INTO questions_table(userId, question) VALU
 
 exports.insertQuestion = (req, res) =>{
     const user = {
-        userId: req.body.userId, 
+        userId: req.user.id, 
         question: req.body.question
     }
     
