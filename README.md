@@ -41,3 +41,11 @@ HOST_LOCALLY = http://localhost:5000/api/v1
                 }
             }
         ```
+        
++ Response 400
+    + Body 
+        ```{
+                "status": "error",
+                "message": "user have been registered."
+            }
+        ```
