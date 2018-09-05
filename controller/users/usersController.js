@@ -120,3 +120,14 @@ exports.loginUser = (req, res) =>{
         res.status(505).send({status: 'error', message: 'server error'})
     })
 }
+
+exports.getUser =async (req, res) => {
+    if(req.user === undefined){
+        res.status(400).send('cant get a user')
+    }else{
+        const userData = _.pick(req.user, ['id','username', 'email'])
+    
+        res.send(userData)
+    }
+   
+}

@@ -3,7 +3,12 @@ const path =  require('path')
 const logger = require('morgan')
 const Pool = require('./database')
 const config = require('config')
+const cors = require('cors')
 
+//make this token visible
+const corParams = { 
+    exposedHeaders: ['x-auth-token']
+}
 
 //app
 const app = express()
@@ -25,6 +30,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(logger('dev'))
+app.use(cors(corParams))
 
 
 //change this later
@@ -45,7 +51,7 @@ Pool.query('CREATE TABLE IF NOT EXISTS users_table(id UUID PRIMARY KEY DEFAULT u
 
 
 //Table to store all the questions 
-Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, userId UUID, question TEXT NOT NULL)')
+Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, userId UUID,username TEXT NOT NULL, question TEXT NOT NULL)')
 .then(res => {console.log(`Stuffs went well \n ${res.rows}`)})
 .catch(new Error().message)
 

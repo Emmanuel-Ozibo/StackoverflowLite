@@ -1,8 +1,7 @@
 const pool = require('../../database')
 
 
-
-const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id ASC'
+const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id DESC'
 
 //This is an sql query to get the answers of a particular question using its id
 const allAnswers = 'SELECT answer,status FROM answers_table WHERE questionid = $1'
@@ -22,9 +21,10 @@ const questionAskedByUser = 'SELECT question FROM questions_table WHERE userid =
 
 
 
+//getting a question should also return the user details 
+exports.getQuestions =async (req, res) => {
+   const allQuestions = await pool.query(getAllQuestions)
 
-exports.getQuestions = (req, res) => {
-    pool.query(getAllQuestions)
     .then(response => {
         res.send(response.rows)//returns a list of questions
     })
@@ -93,7 +93,7 @@ exports.getAllQuestionsAskByUser = async (req, res) =>{
 
     try {
         const allQuestions = await pool.query(questionAskedByUser, [`${req.user.id}`])
-        res.send({status: 'success', messages: allQuestions.rows})
+        res.send({status: 'success', data: allQuestions.rows})
     } catch (error) {
         res.status(505).send(`An error occured while getting all questions: ${error.message}`)
     }
