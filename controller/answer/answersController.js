@@ -1,7 +1,7 @@
 const pool = require('../../database')
 const _ = require('lodash')
 
-const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId, username) VALUES($1, $2, $3, $4, $5) RETURNING *'
+const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId, username, upvotes, downvotes) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *'
 
 const getUserThatAnsweredquestion = 'SELECT userid FROM answers_table WHERE id = $1'
 
@@ -10,6 +10,15 @@ const updateAnAnswer = 'UPDATE answers_table SET answer = $1 WHERE id = $2'
 const askQuestionUserId = 'SELECT userid FROM questions_table WHERE id = $1'
 
 const acceptAnswerString = 'UPDATE answers_table SET status = $1 WHERE id = $2'
+
+const totalUpvotes = 'SELECT upvotes FROM answers_table WHERE id = $1'
+
+const upvote = 'UPDATE answers_table SET upvotes = $1 WHERE  id = $2'
+
+const totalDownVotes = 'SELECT downvotes FROM answers_table WHERE id = $1'
+
+const downVote = 'UPDATE answers_table SET downvotes = $1 WHERE id = $2'
+
 
 
 exports.postAnswer = async (req, res) =>{
@@ -21,7 +30,7 @@ exports.postAnswer = async (req, res) =>{
 
     const user = req.user
 
-    values = [`${answer.questionId}`, `${answer.answer}`, false, `${user.id}`, `${user.username}`]
+    values = [`${answer.questionId}`, `${answer.answer}`, false, `${user.id}`, `${user.username}`, 0, 0]
 
     try {
         const answerResponse = await pool.query(postAnswerString, values)
@@ -86,4 +95,42 @@ const acceptAnswer = (answerId, status, res) => {
     .catch(error => {
         res.status(505).send(`Cannot accept answer, Internal server error: ${error.message}`)
     })
+}
+
+
+
+exports.upvoteAnAnswer = async (req, res) => {
+    const ansId = req.params.answerId
+    const user = req.user
+    
+    try {
+        const tUpvotes = await pool.query(totalUpvotes, [ansId])
+        const total_count = tUpvotes.rows[0].upvotes + 1
+        console.log(total_count)
+        const upvoteQuestion = await pool.query(upvote, [total_count, ansId])
+        //confirm.log(upvoteQuestion)
+        res.send({status: 'success', message: `upvoted: ${total_count}`})
+    } catch (error) {
+        res.status(505).send(`Something went wrong: ${error}`)
+    }
+}
+
+
+
+exports.downvoteAnswer = async (req, res) => {
+    const ansId = req.params.answerId
+
+    try {
+        const tDownVotes = await pool.query(totalDownVotes, [ansId])
+        const count = tDownVotes.rows[0].downvotes + 1
+        const downVoteQuestion = await pool.query(count, [ansId])
+
+        res.send({
+            status: 'success', 
+            message: 'downvoted!'
+        })
+
+    } catch (error) {
+        res.status(505).send(`Something went wrong: ${error}`)
+    }
 }

@@ -57,7 +57,7 @@ Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, us
 
 
 //Table to store all the answers
-Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN, userId UUID, username TEXT NOT NULL)')
+Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN, userId UUID, username TEXT NOT NULL, upvotes INT, downvotes INT)')
 .then(res => {console.log('Answers table created...')})
 .catch(e => {console.log('answers table not created...')})
 
