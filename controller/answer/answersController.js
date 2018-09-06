@@ -1,6 +1,7 @@
 const pool = require('../../database')
+const _ = require('lodash')
 
-const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId) VALUES($1, $2, $3, $4) RETURNING *'
+const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId, username) VALUES($1, $2, $3, $4, $5) RETURNING *'
 
 const getUserThatAnsweredquestion = 'SELECT userid FROM answers_table WHERE id = $1'
 
@@ -11,23 +12,27 @@ const askQuestionUserId = 'SELECT userid FROM questions_table WHERE id = $1'
 const acceptAnswerString = 'UPDATE answers_table SET status = $1 WHERE id = $2'
 
 
-exports.postAnswer = (req, res) =>{
+exports.postAnswer = async (req, res) =>{
+
     const answer = {
         questionId: req.params.questionId, 
-        answer: req.body.answer,
-        userId: req.body.userId
+        answer: req.body.answer
     }
 
-    values = [`${answer.questionId}`, `${answer.answer}`, false, `${answer.userId}`]
+    const user = req.user
 
-    pool.query(postAnswerString, values)
-    .then(response => {
-        res.send(response.rows[0])
-    })
-    .catch(e => {
-        console.log(`${e.stack}`)
-        res.send(e)
-    })
+    values = [`${answer.questionId}`, `${answer.answer}`, false, `${user.id}`, `${user.username}`]
+
+    try {
+        const answerResponse = await pool.query(postAnswerString, values)
+        const answerDetail = answerResponse.rows[0]
+        const userDetails = _.pick(user, ['username', 'email'])
+        res.send({answer_detail: answerDetail, user_details: userDetails})
+    } catch (error) {
+        console.log(`${error.stack}`)
+        res.status(400).send(error)
+    }
+   
 }
 
 

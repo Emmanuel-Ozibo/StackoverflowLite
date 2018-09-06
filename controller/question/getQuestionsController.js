@@ -4,7 +4,7 @@ const pool = require('../../database')
 const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id DESC'
 
 //This is an sql query to get the answers of a particular question using its id
-const allAnswers = 'SELECT answer,status FROM answers_table WHERE questionid = $1'
+const allAnswers = 'SELECT answer,status,username FROM answers_table WHERE questionid = $1'
 
 //This sql query helps to get a particular question with :questionId
 const getSingleQuestion = 'SELECT * FROM questions_table WHERE id = $1'
@@ -37,8 +37,6 @@ exports.getQuestions =async (req, res) => {
 
 
 
-
-
 exports.setSingleQuestion = (req, res) =>{
 //get the question from the table, then use the id to fetch the answers
     const questionId = req.params.questionId
@@ -59,6 +57,7 @@ exports.setSingleQuestion = (req, res) =>{
         console.log(`some shitty error occured: ${err}`)
         res.send(err.stack)
     })
+    
 }
 
 
