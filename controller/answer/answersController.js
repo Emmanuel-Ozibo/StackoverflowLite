@@ -109,7 +109,7 @@ exports.upvoteAnAnswer = async (req, res) => {
         console.log(total_count)
         const upvoteQuestion = await pool.query(upvote, [total_count, ansId])
         //confirm.log(upvoteQuestion)
-        res.send({status: 'success', message: `upvoted: ${total_count}`})
+        res.send({status: 'success', message: `upvoted.`, count: total_count})
     } catch (error) {
         res.status(505).send(`Something went wrong: ${error}`)
     }
@@ -123,11 +123,12 @@ exports.downvoteAnswer = async (req, res) => {
     try {
         const tDownVotes = await pool.query(totalDownVotes, [ansId])
         const count = tDownVotes.rows[0].downvotes + 1
-        const downVoteQuestion = await pool.query(count, [ansId])
+        const downVoteQuestion = await pool.query(downVote, [count, ansId])
 
         res.send({
             status: 'success', 
-            message: 'downvoted!'
+            message: `downvoted.`, 
+            count: count
         })
 
     } catch (error) {
