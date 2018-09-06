@@ -4,7 +4,7 @@ const pool = require('../../database')
 const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id DESC'
 
 //This is an sql query to get the answers of a particular question using its id
-const allAnswers = 'SELECT id,answer,status,username FROM answers_table WHERE questionid = $1'
+const allAnswers = 'SELECT * FROM answers_table WHERE questionid = $1'
 
 //This sql query helps to get a particular question with :questionId
 const getSingleQuestion = 'SELECT * FROM questions_table WHERE id = $1'
