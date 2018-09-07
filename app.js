@@ -49,31 +49,23 @@ app.use('/api/v1/questions', questionsRouter)
 app.use('/api/v1/auth', authRouter)
 
 //create uuid generator
-Pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
-.then(result => {console.log('uuid generator created')})
-.catch(error => {console.log(error)})
-
+const p1 =  Pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
 //Table to store users
-Pool.query('CREATE TABLE IF NOT EXISTS users_table(id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)')
-.then(result => {console.log(`users table created ${result.rows}`)})
-.catch(error => {console.log(`Failed to create users table: ${error}`)})
-
-
+const p2 =  Pool.query('CREATE TABLE IF NOT EXISTS users_table(id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)')
 //Table to store all the questions 
-Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, userId UUID,username TEXT NOT NULL, question TEXT NOT NULL)')
-.then(res => {console.log(`Stuffs went well \n ${res.rows}`)})
-.catch(new Error().message)
-
-
+const p3 = Pool.query('CREATE TABLE IF NOT EXISTS questions_table(id SERIAL PRIMARY KEY, userId UUID,username TEXT NOT NULL, question TEXT NOT NULL)')
 //Table to store all the answers
-Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN, userId UUID, username TEXT NOT NULL, upvotes INT, downvotes INT)')
-.then(res => {console.log('Answers table created...')})
-.catch(e => {console.log('answers table not created...')})
-
-
+const p4 =  Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, questionId SERIAL, answer TEXT NOT NULL, status BOOLEAN, userId UUID, username TEXT NOT NULL, upvotes INT, downvotes INT)')
 //Table to store all comments
-Pool.query('CREATE TABLE IF NOT EXISTS comments_table(id SERIAL PRIMARY KEY, answerid SERIAL, userid TEXT NOT NULL, username TEXT NOT NULL, comment TEXT NOT NULL)')
-.then(result => {console.log('Comments table created...')})
+const p5 = Pool.query('CREATE TABLE IF NOT EXISTS comments_table(id SERIAL PRIMARY KEY, answerid SERIAL, userid TEXT NOT NULL, username TEXT NOT NULL, comment TEXT NOT NULL)')
+
+
+//resolve all promise returned
+Promise.all([p1, p2, p3, p4, p5])
+.then(result => {
+    console.log('All tables created')
+})
 .catch(error => {console.log(error)})
+
 
 module.exports = app
