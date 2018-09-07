@@ -1,3 +1,8 @@
 {
-    "jwtPrivateKey": ""
+    "jwtPrivateKey": "", 
+    "db_PASSWORD":"", 
+    "db_HOST": "localhost", 
+    "db_NAME": "sofDb", 
+    "db_USER": "postgres", 
+    "db_PORT": 5432
 }

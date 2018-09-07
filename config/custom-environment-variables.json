@@ -1,4 +1,9 @@
 
 {
-    "jwtPrivateKey": "sof_jwtPrivateKey"
+    "jwtPrivateKey": "sof_jwtPrivateKey", 
+    "db_PASSWORD":"sof_password", 
+    "db_HOST": "sof_host", 
+    "db_NAME": "sof_name", 
+    "db_USER": "sof_user", 
+    "db_PORT": "sof_port"
 }
