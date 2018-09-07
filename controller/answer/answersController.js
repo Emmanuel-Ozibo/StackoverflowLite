@@ -19,6 +19,8 @@ const totalDownVotes = 'SELECT downvotes FROM answers_table WHERE id = $1'
 
 const downVote = 'UPDATE answers_table SET downvotes = $1 WHERE id = $2'
 
+const allAnswersByUser = 'SELECT answer FROM answers_table WHERE userid = $1'
+
 
 
 exports.postAnswer = async (req, res) =>{
@@ -133,5 +135,20 @@ exports.downvoteAnswer = async (req, res) => {
 
     } catch (error) {
         res.status(505).send(`Something went wrong: ${error}`)
+ 
+    }
+}
+
+exports.getAllAnswersGivingByAUser = async (req, res) => {
+    const userId = req.user.id
+    try {
+        const answers = await pool.query(allAnswersByUser, [userId])
+        const count = answers.rowCount
+        const answrs = answers.rows
+
+        res.send({status: 'success', count: count, answers: answrs})
+        
+    } catch (error) {
+        console.log(error)
     }
 }

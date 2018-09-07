@@ -62,5 +62,9 @@ Pool.query('CREATE TABLE IF NOT EXISTS answers_table(id SERIAL PRIMARY KEY, ques
 .catch(e => {console.log('answers table not created...')})
 
 
-module.exports = app
+//Table to store all comments
+Pool.query('CREATE TABLE IF NOT EXISTS comments_table(id SERIAL PRIMARY KEY, answerid SERIAL, userid TEXT NOT NULL, username TEXT NOT NULL, comment TEXT NOT NULL)')
+.then(result => {console.log('Comments table created...')})
+.catch(error => {console.log(error)})
 
+module.exports = app
