@@ -92,7 +92,8 @@ exports.getAllQuestionsAskByUser = async (req, res) =>{
 
     try {
         const allQuestions = await pool.query(questionAskedByUser, [`${req.user.id}`])
-        res.send({status: 'success', data: allQuestions.rows})
+        const count = allQuestions.rowCount
+        res.send({status: 'success',count: count, data: allQuestions.rows})
     } catch (error) {
         res.status(505).send(`An error occured while getting all questions: ${error.message}`)
     }
