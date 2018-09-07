@@ -4,6 +4,9 @@ const logger = require('morgan')
 const Pool = require('./database')
 const config = require('config')
 const cors = require('cors')
+const helmet = require('helmet')
+const compression = require('compression')
+
 
 //make this token visible
 const corParams = { 
@@ -31,6 +34,8 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(logger('dev'))
 app.use(cors(corParams))
+app.use(helmet())
+app.use(compression())
 
 
 //change this later

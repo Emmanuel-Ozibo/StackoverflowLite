@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "start": "node start.js"
+  },
+  "engines": {
+    "node": "8.11.1"
   },
   "repository": {
     "type": "git",
