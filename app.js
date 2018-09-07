@@ -48,6 +48,10 @@ if(app.get('env') === 'developement'){
 app.use('/api/v1/questions', questionsRouter)
 app.use('/api/v1/auth', authRouter)
 
+//create uuid generator
+Pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
+.then(result => {console.log('uuid generator created')})
+.catch(error => {console.log(error)})
 
 //Table to store users
 Pool.query('CREATE TABLE IF NOT EXISTS users_table(id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), username TEXT NOT NULL, email TEXT NOT NULL, password TEXT NOT NULL)')
