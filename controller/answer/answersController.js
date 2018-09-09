@@ -54,7 +54,7 @@ const updateAnswer = async (answerId, newAnswer, res) =>{
         res.send({status: 'success', message: 'Answer updated.'})
     })
     .catch(error => {
-        res.status(505).send(`Cannot update answer, internal server error: ${error.message}`)
+        res.status(400).send(`Cannot update answer, internal server error: ${error.message}`)
     })
 }
 
@@ -77,6 +77,7 @@ exports.modifyAnswer = async (req, res) => {
         if(result.rows[0].userid === userId){
             //update answer
             updateAnswer(answerId, req.body.answer, res)
+            
         }else{
             //accept the answer
             acceptAnswer(answerId, req.body.status, res)
@@ -89,13 +90,14 @@ exports.modifyAnswer = async (req, res) => {
 }
 
 
-const acceptAnswer = (answerId, status, res) => {
+const acceptAnswer = (answerId, status, res) =>{
+    console.log('this was called!')
     pool.query(acceptAnswerString, [status, answerId])
     .then(result => {
         res.send({status: 'success', message: 'Answer Accepted.'})
     })
     .catch(error => {
-        res.status(505).send(`Cannot accept answer, Internal server error: ${error.message}`)
+        res.status(400).send(`Cannot accept answer, Internal server error: ${error.message}`)
     })
 }
 

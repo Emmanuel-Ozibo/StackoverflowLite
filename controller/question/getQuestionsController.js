@@ -65,7 +65,7 @@ exports.setSingleQuestion = (req, res) =>{
 
 exports.deleteQuestion = (req, res) => {
     const quesId = req.params.questionId
-    const userId = req.body.userId
+    const userId = req.user.id
     
     pool.query(getUserIdForQuestion, [quesId])
     .then(result => {
@@ -81,6 +81,7 @@ exports.deleteQuestion = (req, res) => {
             })
         }else{
             res.status(400).send({status: 'failed', message: 'Access denied!!'})
+            console.log(`mUserId: ${mUserId} \n userId: ${userId}`)
         }
     })
     .catch(err => {
