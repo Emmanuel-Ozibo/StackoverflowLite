@@ -1,5 +1,5 @@
-const config = require('config')
-const jwt = require('jsonwebtoken')
+import config from "config"
+import jwt from "jsonwebtoken"
 
 exports.modifyAnswer = (req, res, next) =>{
     const token = req.header('x-auth-token')

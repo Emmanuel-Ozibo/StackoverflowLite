@@ -1,5 +1,6 @@
-const pool = require('../../database')
-const _ = require('lodash')
+import pool from "../../database"
+import _ from "lodash"
+
 
 const postAnswerString = 'INSERT INTO answers_table(questionId, answer, status, userId, username, upvotes, downvotes) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *'
 

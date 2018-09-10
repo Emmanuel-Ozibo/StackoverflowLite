@@ -1,13 +1,12 @@
-const router = require('express').Router()
-const authMiddleWare = require('../middleware/auth')
-const modifyAnswerMiddleware = require('../middleware/modifyAnswer')
+import express from "express"
+import authMiddleWare from "../middleware/auth"
+import modifyAnswerMiddleware from "../middleware/modifyAnswer"
 
-//Controller
-const{postQuestionsController,
-     getQuestionsController, 
-     answersController, commentsController}
-      = require('../controller')
+import { postQuestionsController,
+      getQuestionsController, 
+      answersController, commentsController } from "../controller";
 
+const router = express.Router()
 
 
 //Routers

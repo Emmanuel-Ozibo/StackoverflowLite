@@ -1,4 +1,5 @@
-const pool = require('../../database')
+import pool from "../../database"
+
 
 
 const getAllQuestions = 'SELECT * FROM questions_table ORDER BY id DESC'

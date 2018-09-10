@@ -1,5 +1,5 @@
 test('my first test', () => {
 
-//minor
+//minor$
 
 })

@@ -1,10 +1,9 @@
-const pool = require('../../database')
-const Joi = require('joi')
-const bcrypt = require('bcrypt')
-const _= require('lodash')
-const jwt = require('jsonwebtoken')
-const config = require('config')
-
+import pool from '../../database'
+import Joi from 'joi'
+import bcrypt from 'bcrypt'
+import _ from 'lodash'
+import jwt from 'jsonwebtoken'
+import config from 'config'
 
 //query to register new user
 const registerUserString = 'INSERT INTO users_table(username, email, password) VALUES($1, $2, $3) RETURNING*'

@@ -1,11 +1,11 @@
-const express = require('express')
-const path =  require('path')
-const logger = require('morgan')
-const Pool = require('./database')
-const config = require('config')
-const cors = require('cors')
-const helmet = require('helmet')
-const compression = require('compression')
+import express from "express"
+import path from "path"
+import logger from "morgan"
+import Pool from "./database"
+import config from "config"
+import cors from "cors"
+import helmet from "helmet"
+import compression from "compression"
 
 
 //make this token visible

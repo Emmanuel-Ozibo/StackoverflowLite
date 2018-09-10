@@ -1,6 +1,5 @@
-const{Pool, Client} = require('pg')
-const config = require('config')
-
+import {Pool, Client} from "pg";
+import config from "config"
 
 const pool = new Pool({
     user: `${config.get('db_USER')}`, 

@@ -1,5 +1,6 @@
-const pool = require('../../database')
-const _ = require('lodash')
+import pool from "../../database"
+import _ from "lodash"
+
 
 //sql Query to insert comment in db
 const insertComment = 'INSERT INTO comments_table(answerid, userid, username, comment) VALUES($1, $2, $3, $4) RETURNING *'
